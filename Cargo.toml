@@ -1,0 +1,11 @@
+[package]
+name = "name_clip_show"
+version = "0.1.0"
+authors = ["decentninja <encrpt.wave@gmail.com>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+yew = { git = "https://github.com/DenisKolodin/yew" }
+stdweb = "0.4.17"

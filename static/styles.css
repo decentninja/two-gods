@@ -1,0 +1,21 @@
+.hidden {
+	background-color: black;
+	color: black;
+}
+
+button {
+	margin: 0;
+	min-width: 35px;
+}
+
+button:focus {
+	outline: 0;
+}
+
+button.yes {
+	background-color: green;
+}
+
+button.no {
+	background-color: red;
+}
