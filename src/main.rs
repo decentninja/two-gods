@@ -97,7 +97,7 @@ impl Renderable<Model> for Model {
             <iframe src={ link } width="300" height="180" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                     }
                   }) }
-                <p>{format!("How many did you get?: {}/{}", self.correct(), self.total()) }</p>
+                <p>{format!("You got {}/{} correct.", self.correct(), self.total()) }</p>
                 <p>{"GG, see you 2019-07-23 18:00!"}</p>
             </div>
         }
