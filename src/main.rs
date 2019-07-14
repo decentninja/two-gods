@@ -98,7 +98,7 @@ impl Renderable<Model> for Model {
                     }
                   }) }
                 <p>{format!("How many did you get?: {}/{}", self.correct(), self.total()) }</p>
-                <p>{"GG, see you 2019-07-23 18:00!."}</p>
+                <p>{"GG, see you 2019-07-23 18:00!"}</p>
             </div>
         }
     }
