@@ -4,8 +4,13 @@ use std::cell::Cell;
 use yew::{html, Component, ComponentLink, Html, Renderable, ShouldRender};
 
 struct Model {
-    paragraphs: Vec<Vec<ParagraphParts>>,
+    paragraphs: Vec<Item>,
     answers: Vec<Answer>,
+}
+
+enum Item {
+    Paragraph(Vec<ParagraphParts>),
+    SpotifyEmbed(String),
 }
 
 #[derive(Clone, PartialEq)]
@@ -33,20 +38,28 @@ impl Component for Model {
         let n_answers = Cell::new(0); // What? Don't look at me like that!
         let paragraphs = source
             .split("\n\n")
-            .map(|paragraph| {
-                paragraph
-                    .split(|c| c == '[' || c == ']')
-                    .enumerate()
-                    .map(|(i, part)| {
-                        if i % 2 == 0 {
-                            ParagraphParts::Text(part)
-                        } else {
-                            let par = ParagraphParts::Answer(n_answers.get(), part);
-                            n_answers.set(n_answers.get() + 1);
-                            par
-                        }
-                    })
-                    .collect()
+            .map(|text| {
+                let spotify = "https://open.spotify.com";
+                if text.starts_with(spotify) {
+                    let mut link = text.to_owned();
+                    link.insert_str(spotify.len(), "/embed");
+                    Item::SpotifyEmbed(link)
+                } else {
+                    Item::Paragraph(
+                        text.split(|c| c == '[' || c == ']')
+                            .enumerate()
+                            .map(|(i, part)| {
+                                if i % 2 == 0 {
+                                    ParagraphParts::Text(part)
+                                } else {
+                                    let par = ParagraphParts::Answer(n_answers.get(), part);
+                                    n_answers.set(n_answers.get() + 1);
+                                    par
+                                }
+                            })
+                            .collect(),
+                    )
+                }
             })
             .collect();
         Model {
@@ -76,9 +89,12 @@ impl Renderable<Model> for Model {
                 <link rel="stylesheet" href="gutenberg.css"></link>
                 <link rel="stylesheet" href="styles.css"></link>
                 <h1>{ "Two Gods" }</h1>
-                { for self.paragraphs.iter().map(|paragraph| {
-                    html! {
+                { for self.paragraphs.iter().map(|item| match item {
+                    Item::Paragraph(paragraph) => html! {
                         <p>{ for paragraph.iter().map(|part| self.render_part(part)) }</p>
+                    },
+                    Item::SpotifyEmbed(link) => html! {
+            <iframe src={ link } width="300" height="180" frameborder="0" allowtransparency="true" allow="encrypted-media"></iframe>
                     }
                   }) }
                 <p>{format!("How many did you get?: {}/{}", self.correct(), self.total()) }</p>
@@ -120,7 +136,7 @@ impl Model {
                                 <button class={ no } onclick=|_| Msg::Answer(i, false)>{ "✗" }</button>
                             </span>
                         }
-                    },
+                    }
                 }
             }
         }

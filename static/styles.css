@@ -19,3 +19,7 @@ button.yes {
 button.no {
 	background-color: red;
 }
+
+iframe {
+	width: 100%;
+}
