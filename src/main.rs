@@ -81,7 +81,7 @@ impl Renderable<Model> for Model {
                         <p>{ for paragraph.iter().map(|part| self.render_part(part)) }</p>
                     }
                   }) }
-                <p>{format!("Results: {}/{}", self.correct(), self.total()) }</p>
+                <p>{format!("How many did you get?: {}/{}", self.correct(), self.total()) }</p>
             </div>
         }
     }
